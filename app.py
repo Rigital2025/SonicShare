@@ -49,14 +49,17 @@ import os
 if not os.path.exists("logs"):
     os.makedirs("logs")
 
-if uploaded_file is not None and vibe_tags:
-    # Prepare data to store
-    file_info = {
-        "filename": uploaded_file.name,
-        "tags": ", ".join(vibe_tags),
-        "prompt": prompt_output,
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
+file_info = {
+    "filename": uploaded_file.name,
+    "tags": ", ".join(vibe_tags),
+    "prompt": prompt_output,
+    "custom_notes": custom_notes,
+    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+}
+
+st.subheader("🗒️ Add Custom Notes")
+
+custom_notes = st.text_area("Describe this vocal sample in your own words (optional):", height=100)
 
     # Convert to DataFrame
     df = pd.DataFrame([file_info])
@@ -74,6 +77,7 @@ data_path = "logs/data.csv"
 
 if os.path.exists(data_path):
     df = pd.read_csv(data_path)
-    st.dataframe(df)
+    st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "timestamp"]])
+
 else:
     st.info("📭 No uploads found yet. Upload something soulful to get started!")
