@@ -32,5 +32,12 @@ vibe_tags = st.multiselect(
 
 if vibe_tags:
     st.success(f"🎯 Tags selected: {', '.join(vibe_tags)}")
+st.subheader("🎧 Generate a Sonic Prompt")
+
+if vibe_tags:
+    joined_tags = ", ".join(vibe_tags)
+    prompt_output = f"A {joined_tags.lower()} vocal sample, perfect for genre-bending compositions, AI-enhanced music, or soulful loops."
+
+    st.text_area("📝 AI-Ready Prompt", value=prompt_output, height=100)
 
 st.info("✨ Feature Modules Coming Soon:\n- Vocal Upload\n- Prompt Generator\n- Licensing Tool\n- Playback Preview")
