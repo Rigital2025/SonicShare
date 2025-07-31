@@ -1,6 +1,11 @@
 import streamlit as st
+from PIL import Image
 
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
+
+# Display logo
+image = Image.open("sonicshare_logo.png")
+st.image(image, use_column_width=True)
 
 st.title("🎙️ SonicShare")
 st.subheader("Your Portal for Vocal Magic + AI Music Creation")
@@ -13,4 +18,3 @@ Upload your voice. Tag your vibe. Empower your creativity.
 """)
 
 st.info("✨ Feature Modules Coming Soon:\n- Vocal Upload\n- Prompt Generator\n- Licensing Tool\n- Playback Preview")
-
