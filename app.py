@@ -69,5 +69,16 @@ if uploaded_file is not None:
         else:
             df.to_csv("logs/data.csv", index=False)
 
-        st.success("✅ Info saved to a
+       st.success("✅ Info saved to archive!")
+
+# Archive Viewer
+st.header("📚 Upload Archive")
+
+data_path = "logs/data.csv"
+
+if os.path.exists(data_path):
+    df = pd.read_csv(data_path)
+    st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "timestamp"]])
+else:
+    st.info("📭 No uploads found yet. Upload something soulful to get started!")
 
