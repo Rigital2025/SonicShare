@@ -41,3 +41,30 @@ if vibe_tags:
     st.text_area("📝 AI-Ready Prompt", value=prompt_output, height=100)
 
 st.info("✨ Feature Modules Coming Soon:\n- Vocal Upload\n- Prompt Generator\n- Licensing Tool\n- Playback Preview")
+import pandas as pd
+from datetime import datetime
+import os
+
+# Create a folder if it doesn't exist (optional for future file saving)
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+if uploaded_file is not None and vibe_tags:
+    # Prepare data to store
+    file_info = {
+        "filename": uploaded_file.name,
+        "tags": ", ".join(vibe_tags),
+        "prompt": prompt_output,
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    # Convert to DataFrame
+    df = pd.DataFrame([file_info])
+
+    # Append to CSV
+    if os.path.exists("logs/data.csv"):
+        df.to_csv("logs/data.csv", mode='a', header=False, index=False)
+    else:
+        df.to_csv("logs/data.csv", index=False)
+
+    st.success("✅ Info saved to archive!")
