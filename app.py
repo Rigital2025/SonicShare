@@ -16,5 +16,12 @@ Upload your voice. Tag your vibe. Empower your creativity.
 
 🚧 This is an early-stage prototype. Stay tuned for updates!
 """)
+st.header("🎵 Upload a Vocal Sample")
+
+uploaded_file = st.file_uploader("Upload your vocal run, riff, or harmony sample:", type=["wav", "mp3", "aiff"])
+
+if uploaded_file is not None:
+    st.audio(uploaded_file, format='audio/wav')
+    st.success("✅ Vocal uploaded successfully!")
 
 st.info("✨ Feature Modules Coming Soon:\n- Vocal Upload\n- Prompt Generator\n- Licensing Tool\n- Playback Preview")
