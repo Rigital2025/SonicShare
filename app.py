@@ -23,5 +23,14 @@ uploaded_file = st.file_uploader("Upload your vocal run, riff, or harmony sample
 if uploaded_file is not None:
     st.audio(uploaded_file, format='audio/wav')
     st.success("✅ Vocal uploaded successfully!")
+st.subheader("🧠 Tag This Vibe")
+
+vibe_tags = st.multiselect(
+    "Select the tags that describe this vocal sample:",
+    ["Falsetto", "Harmony", "Ad-lib", "Run", "Vibrato", "Whisper", "Shout", "Soulful", "Gospel", "Neo-Soul", "R&B", "Ambient", "Layered", "Loop-ready", "Dry", "Wet", "Reverb", "Raw Emotion"]
+)
+
+if vibe_tags:
+    st.success(f"🎯 Tags selected: {', '.join(vibe_tags)}")
 
 st.info("✨ Feature Modules Coming Soon:\n- Vocal Upload\n- Prompt Generator\n- Licensing Tool\n- Playback Preview")
