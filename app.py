@@ -69,7 +69,7 @@ if uploaded_file is not None:
         else:
             df.to_csv("logs/data.csv", index=False)
 
-       st.success("✅ Info saved to archive!")
+st.success("✅ Info saved to archive!")
 
 # Archive Viewer
 st.header("📚 Upload Archive")
