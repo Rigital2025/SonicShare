@@ -68,3 +68,12 @@ if uploaded_file is not None and vibe_tags:
         df.to_csv("logs/data.csv", index=False)
 
     st.success("✅ Info saved to archive!")
+st.header("📚 Upload Archive")
+
+data_path = "logs/data.csv"
+
+if os.path.exists(data_path):
+    df = pd.read_csv(data_path)
+    st.dataframe(df)
+else:
+    st.info("📭 No uploads found yet. Upload something soulful to get started!")
