@@ -81,4 +81,16 @@ if os.path.exists(data_path):
     st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "timestamp"]])
 else:
     st.info("📭 No uploads found yet. Upload something soulful to get started!")
+st.subheader("⬇️ Download Archive")
+
+if os.path.exists(data_path):
+    with open(data_path, "rb") as f:
+        st.download_button(
+            label="📥 Download Archive as CSV",
+            data=f,
+            file_name="sonicshare_archive.csv",
+            mime="text/csv"
+        )
+else:
+    st.info("🕊️ Archive not ready for download yet. Upload some magic first.")
 
