@@ -61,8 +61,20 @@ if uploaded_file is not None:
             "tags": ", ".join(vibe_tags),
             "prompt": prompt_output,
             "custom_notes": custom_notes,
+            "license": license_option,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
+st.subheader("📜 Choose Licensing Option")
+
+license_option = st.radio(
+    "How would you like this vocal sample to be shared or used?",
+    (
+        "Contact me before use (default)",
+        "Free to use with credit",
+        "Creative Commons (non-commercial)",
+        "Commercial use allowed"
+    )
+)
 
         df = pd.DataFrame([file_info])
 
@@ -80,7 +92,7 @@ data_path = "logs/data.csv"
 
 if os.path.exists(data_path):
     df = pd.read_csv(data_path)
-    st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "timestamp"]])
+    st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]])
 else:
     st.info("📭 No uploads found yet. Upload something soulful to get started!")
 st.subheader("⬇️ Download Archive")
