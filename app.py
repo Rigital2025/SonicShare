@@ -13,6 +13,8 @@ st.image(image, use_column_width=True)
 
 # Title
 st.title("🎙️ SonicShare")
+
+st.markdown("Use this archive file to save your vocal metadata, share it with producers, or keep your creative catalog organized.")
 st.subheader("Your Portal for Vocal Magic + AI Music Creation")
 
 st.markdown("""
