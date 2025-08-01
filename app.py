@@ -78,9 +78,9 @@ license_option = st.radio(
 
 df = pd.DataFrame([file_info])
 
-        if os.path.exists("logs/data.csv"):
+    if os.path.exists("logs/data.csv"):
             df.to_csv("logs/data.csv", mode='a', header=False, index=False)
-        else:
+    else:
             df.to_csv("logs/data.csv", index=False)
 
 st.success("✅ Info saved to archive!")
