@@ -55,17 +55,8 @@ if uploaded_file is not None:
     if vibe_tags:
         if not os.path.exists("logs"):
             os.makedirs("logs")
-
-        file_info = {
-            "filename": uploaded_file.name,
-            "tags": ", ".join(vibe_tags),
-            "prompt": prompt_output,
-            "custom_notes": custom_notes,
-            "license": license_option,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
+            
 st.subheader("📜 Choose Licensing Option")
-
 license_option = st.radio(
     "How would you like this vocal sample to be shared or used?",
     (
@@ -75,6 +66,14 @@ license_option = st.radio(
         "Commercial use allowed"
     )
 )
+        file_info = {
+            "filename": uploaded_file.name,
+            "tags": ", ".join(vibe_tags),
+            "prompt": prompt_output,
+            "custom_notes": custom_notes,
+            "license": license_option,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
 
 df = pd.DataFrame([file_info])
 
