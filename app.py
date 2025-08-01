@@ -4,17 +4,15 @@ import pandas as pd
 from datetime import datetime
 import os
 
-# Set page config
+# Page setup
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
 
-# Display logo
+# Logo
 image = Image.open("sonicshare_logo.png")
 st.image(image, use_column_width=True)
 
-# Title
+# Title & Intro
 st.title("🎙️ SonicShare")
-
-st.markdown("Use this archive file to save your vocal metadata, share it with producers, or keep your creative catalog organized.")
 st.subheader("Your Portal for Vocal Magic + AI Music Creation")
 
 st.markdown("""
@@ -26,7 +24,6 @@ Upload your voice. Tag your vibe. Empower your creativity.
 
 # Upload Section
 st.header("🎵 Upload a Vocal Sample")
-
 uploaded_file = st.file_uploader("Upload your vocal run, riff, or harmony sample:", type=["wav", "mp3", "aiff"])
 
 if uploaded_file is not None:
@@ -51,22 +48,24 @@ if uploaded_file is not None:
     st.subheader("🗒️ Add Custom Notes")
     custom_notes = st.text_area("Describe this vocal sample in your own words (optional):", height=100)
 
+    # Licensing Option
+    st.subheader("📜 Choose Licensing Option")
+    license_option = st.radio(
+        "How would you like this vocal sample to be shared or used?",
+        (
+            "Contact me before use (default)",
+            "Free to use with credit",
+            "Creative Commons (non-commercial)",
+            "Commercial use allowed"
+        )
+    )
+
     # Save to Archive
     if vibe_tags:
         if not os.path.exists("logs"):
             os.makedirs("logs")
-            
-st.subheader("📜 Choose Licensing Option")
-license_option = st.radio(
-    "How would you like this vocal sample to be shared or used?",
-    (
-        "Contact me before use (default)",
-        "Free to use with credit",
-        "Creative Commons (non-commercial)",
-        "Commercial use allowed"
-    )
-)
-file_info = {
+
+        file_info = {
             "filename": uploaded_file.name,
             "tags": ", ".join(vibe_tags),
             "prompt": prompt_output,
@@ -75,28 +74,25 @@ file_info = {
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
-df = pd.DataFrame([file_info])
+        df = pd.DataFrame([file_info])
 
-if os.path.exists("logs/data.csv"):
-    df.to_csv("logs/data.csv", mode='a', header=False, index=False)
-else:
-    df.to_csv("logs/data.csv", index=False)
+        if os.path.exists("logs/data.csv"):
+            df.to_csv("logs/data.csv", mode='a', header=False, index=False)
+        else:
+            df.to_csv("logs/data.csv", index=False)
 
-st.success("✅ Info saved to archive!")
+        st.success("✅ Info saved to archive!")
 
 # Archive Viewer
 st.header("📚 Upload Archive")
-
 data_path = "logs/data.csv"
 
 if os.path.exists(data_path):
     df = pd.read_csv(data_path)
     st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]])
-else:
-    st.info("📭 No uploads found yet. Upload something soulful to get started!")
-st.subheader("⬇️ Download Archive")
-
-if os.path.exists(data_path):
+    
+    # Download Button
+    st.subheader("⬇️ Download Archive")
     with open(data_path, "rb") as f:
         st.download_button(
             label="📥 Download Archive as CSV",
@@ -105,5 +101,6 @@ if os.path.exists(data_path):
             mime="text/csv"
         )
 else:
-    st.info("🕊️ Archive not ready for download yet. Upload some magic first.")
+    st.info("📭 No uploads found yet. Upload something soulful to get started!")
+
 
