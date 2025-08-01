@@ -66,7 +66,7 @@ license_option = st.radio(
         "Commercial use allowed"
     )
 )
-        file_info = {
+file_info = {
             "filename": uploaded_file.name,
             "tags": ", ".join(vibe_tags),
             "prompt": prompt_output,
