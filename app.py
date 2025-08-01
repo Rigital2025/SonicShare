@@ -76,7 +76,7 @@ license_option = st.radio(
     )
 )
 
-    df = pd.DataFrame([file_info])
+df = pd.DataFrame([file_info])
 
         if os.path.exists("logs/data.csv"):
             df.to_csv("logs/data.csv", mode='a', header=False, index=False)
