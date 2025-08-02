@@ -87,11 +87,35 @@ if uploaded_file is not None:
 st.header("📚 Upload Archive")
 data_path = "logs/data.csv"
 
-if os.path.exists(data_path):
+# 🧠 Baby Step: Robust CSV loader
+try:
     df = pd.read_csv(data_path)
+    st.success("📥 CSV loaded successfully!")
+
+except pd.errors.ParserError as e:
+    st.error("⚠️ Uh-oh! Something’s wrong with the CSV format. Some rows couldn't be read.")
+    
+    # Optional fallback: try loading with 'on_bad_lines=skip' if you're okay with skipping them
+    try:
+        df = pd.read_csv(data_path, on_bad_lines='skip')
+        st.warning("⚠️ Loaded with skipped bad lines. Please review the data.")
+    except Exception as fallback_error:
+        st.error("❌ Couldn't load the CSV at all. Please check the file manually.")
+        st.stop()
+
+except FileNotFoundError:
+    st.error("🚫 CSV file not found. Make sure it's saved at 'logs/data.csv'.")
+    st.stop()
+
+except Exception as general_error:
+    st.error(f"🔥 Unexpected error: {general_error}")
+    st.stop()
+
+# Display the archive (only if data is loaded successfully)
+if not df.empty:
     st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]])
     
-    # Download Button
+    # Download CSV Button
     st.subheader("⬇️ Download Archive")
     with open(data_path, "rb") as f:
         st.download_button(
@@ -102,5 +126,4 @@ if os.path.exists(data_path):
         )
 else:
     st.info("📭 No uploads found yet. Upload something soulful to get started!")
-
 
