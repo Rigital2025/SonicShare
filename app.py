@@ -76,12 +76,12 @@ if uploaded_file is not None:
 
         df = pd.DataFrame([file_info])
 
-        if os.path.exists("logs/data.csv"):
-            df.to_csv("logs/data.csv", mode='a', header=False, index=False)
-        else:
-            df.to_csv("logs/data.csv", index=False)
+log_path = "logs/data.csv"
+write_header = not os.path.exists(log_path)
 
-        st.success("✅ Info saved to archive!")
+df.to_csv(log_path, mode='a', header=write_header, index=False)
+
+st.success("✅ Info saved to archive!")
 
 # Archive Viewer
 st.header("📚 Upload Archive")
@@ -112,10 +112,11 @@ except Exception as general_error:
     st.stop()
 
 # Display the archive (only if data is loaded successfully)
-if not df.empty:
-    st.dataframe(df[["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]])
-    
-    # Download CSV Button
+expected_columns = ["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]
+
+if all(col in df.columns for col in expected_columns):
+    st.dataframe(df[expected_columns])
+
     st.subheader("⬇️ Download Archive")
     with open(data_path, "rb") as f:
         st.download_button(
@@ -125,5 +126,7 @@ if not df.empty:
             mime="text/csv"
         )
 else:
-    st.info("📭 No uploads found yet. Upload something soulful to get started!")
+    st.warning("⚠️ Archive loaded, but missing expected columns. You may need to clean or recreate the file.")
+    st.dataframe(df)
+
 
