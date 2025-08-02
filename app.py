@@ -3,6 +3,7 @@ from PIL import Image
 import pandas as pd
 from datetime import datetime
 import os
+from transformers import pipeline
 @st.cache_resource
 def load_classifier():
     return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
