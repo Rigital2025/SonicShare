@@ -3,6 +3,11 @@ from PIL import Image
 import pandas as pd
 from datetime import datetime
 import os
+@st.cache_resource
+def load_classifier():
+    return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+
+classifier = load_classifier()
 
 # --- Page Setup ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
@@ -109,6 +114,25 @@ if st.button("🧽 Auto-Clean CSV"):
         st.error("⚠️ Cannot clean — 'logs/data.csv' not found.")
     except Exception as e:
         st.error(f"🚨 Cleaning failed: {e}")
+# --- Auto-Clean CSV Tool ---  
+# (Your current logic ends around line 117)
+
+# --- AI Tag Suggestion Section ---
+st.header("🧠 AI Tag Suggestions (Hugging Face)")
+
+user_input = st.text_area("🎤 Describe your audio (tone, style, feeling):", "")
+
+candidate_labels = ["Neo-Soul", "Gospel", "R&B", "Jazz", "Ambient", "Hip-Hop", "Experimental"]
+
+if st.button("✨ Suggest Tags"):
+    if user_input.strip():
+        with st.spinner("Analyzing with Hugging Face..."):
+            result = classifier(user_input, candidate_labels)
+            top_tags = result["labels"][:3]
+            st.success("✅ Suggested Tags:")
+            st.write(", ".join(top_tags))
+    else:
+        st.warning("⚠️ Please provide a description before running AI suggestions.")
 
 try:
     df = pd.read_csv(log_path)
