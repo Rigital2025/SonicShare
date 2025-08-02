@@ -9,6 +9,43 @@ def load_classifier():
     return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 classifier = load_classifier()
+# --- Genre Options ---
+st.markdown("### 🎧 Choose genres to classify against (or use default):")
+
+default_genres = [
+    "Neo-Soul", "R&B", "Afrobeats", "Hip Hop", "Gospel",
+    "Jazz", "Ambient", "Experimental", "Lo-fi", "House"
+]
+
+selected_genres = st.multiselect(
+    "Select genres to compare:",
+    default_genres,
+    default=default_genres[:5]
+)
+
+# --- User Input ---
+user_input = st.text_input("Describe the sound, mood, or instrumentation of your track:")
+
+if st.button("Classify Genre"):
+    if user_input:
+        result = classifier(user_input, candidate_labels=selected_genres)
+
+        st.success("🎯 Top Predicted Genres:")
+
+        # Show results as bar chart
+        genre_scores = {label: score for label, score in zip(result["labels"], result["scores"])}
+        genre_df = pd.DataFrame.from_dict(genre_scores, orient='index', columns=['Confidence'])
+        genre_df = genre_df.sort_values(by="Confidence", ascending=True)
+
+        st.bar_chart(genre_df)
+
+        # Optional: Show top result
+        top_label = result["labels"][0]
+        top_score = result["scores"][0] * 100
+        st.markdown(f"**Top Match:** `{top_label}` with **{top_score:.2f}%** confidence")
+    else:
+        st.warning("Please enter a description before classifying.")
+
 # --- Genre Prediction Section ---
 st.markdown("## 🎶 Genre Classifier")
 
