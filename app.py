@@ -46,7 +46,25 @@ if st.button("Classify Genre"):
         genre_df = pd.DataFrame.from_dict(genre_scores, orient='index', columns=['Confidence'])
         genre_df = genre_df.sort_values(by="Confidence", ascending=True)
 
-        st.bar_chart(genre_df)
+import altair as alt
+
+chart = (
+    alt.Chart(genre_df.reset_index().rename(columns={"index": "Genre"}))
+    .mark_bar(color="#4B0082")  # Indigo vibes 🎷
+    .encode(
+        x=alt.X("Confidence:Q", title="Confidence Score", scale=alt.Scale(domain=[0, 1])),
+        y=alt.Y("Genre:N", sort='-x'),
+        tooltip=["Genre", "Confidence"]
+    )
+    .properties(
+        width=600,
+        height=300,
+        title="🎯 Genre Prediction Confidence"
+    )
+)
+
+st.altair_chart(chart, use_container_width=True)
+
 
         # Top Match Display
         top_label = result["labels"][0]
