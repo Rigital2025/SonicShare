@@ -75,8 +75,8 @@ if uploaded_file is not None:
         }
 
         df = pd.DataFrame([file_info])
-
 log_path = "logs/data.csv"
+# log_path already defined above, so nothing needed here if it's a duplicate
 write_header = not os.path.exists(log_path)
 
 df.to_csv(log_path, mode='a', header=write_header, index=False)
@@ -85,7 +85,7 @@ st.success("✅ Info saved to archive!")
 
 # Archive Viewer
 st.header("📚 Upload Archive")
-data_path = "logs/data.csv"
+data_path = log_path
 
 # 🧠 Baby Step: Robust CSV loader
 try:
@@ -104,7 +104,7 @@ except pd.errors.ParserError as e:
         st.stop()
 
 except FileNotFoundError:
-    st.error("🚫 CSV file not found. Make sure it's saved at 'logs/data.csv'.")
+    st.error(f"🚫 CSV file not found. Make sure it's saved at '{log_path}'.")
     st.stop()
 
 except Exception as general_error:
