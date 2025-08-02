@@ -42,34 +42,35 @@ if st.button("Classify Genre"):
         result = classifier(user_input, candidate_labels=selected_genres)
 
         st.success("🎯 Top Predicted Genres:")
+
+        # --- Altair Chart (✨ Indigo Bar Style) ---
+        import altair as alt
         genre_scores = {label: score for label, score in zip(result["labels"], result["scores"])}
         genre_df = pd.DataFrame.from_dict(genre_scores, orient='index', columns=['Confidence'])
         genre_df = genre_df.sort_values(by="Confidence", ascending=True)
 
-import altair as alt
+        chart = (
+            alt.Chart(genre_df.reset_index().rename(columns={"index": "Genre"}))
+            .mark_bar(color="#4B0082")  # Indigo vibes 🎼
+            .encode(
+                x=alt.X("Confidence:Q", title="Confidence Score", scale=alt.Scale(domain=[0, 1])),
+                y=alt.Y("Genre:N", sort='-x'),
+                tooltip=["Genre", "Confidence"]
+            )
+            .properties(
+                width=600,
+                height=300,
+                title="🎯 Genre Prediction Confidence"
+            )
+        )
 
-chart = (
-    alt.Chart(genre_df.reset_index().rename(columns={"index": "Genre"}))
-    .mark_bar(color="#4B0082")  # Indigo vibes 🎷
-    .encode(
-        x=alt.X("Confidence:Q", title="Confidence Score", scale=alt.Scale(domain=[0, 1])),
-        y=alt.Y("Genre:N", sort='-x'),
-        tooltip=["Genre", "Confidence"]
-    )
-    .properties(
-        width=600,
-        height=300,
-        title="🎯 Genre Prediction Confidence"
-    )
-)
+        st.altair_chart(chart, use_container_width=True)
 
-st.altair_chart(chart, use_container_width=True)
+        # --- Top Match Display ---
+        top_label = result["labels"][0]
+        top_score = result["scores"][0] * 100
+        st.markdown(f"**Top Match:** `{top_label}` with **{top_score:.2f}%** confidence")
 
-
-# Top Match Display
-top_label = result["labels"][0]
-top_score = result["scores"][0] * 100
-st.markdown(f"**Top Match:** `{top_label}` with **{top_score:.2f}%** confidence")
     else:
         st.warning("Please enter a description before classifying.")
 
