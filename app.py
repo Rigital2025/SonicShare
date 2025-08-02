@@ -82,6 +82,16 @@ if uploaded_file:
 # --- Archive Viewer ---
 st.header("📚 Upload Archive")
 
+# 👇 Add this near your Archive Viewer section
+if st.button("🧹 Reset Archive (Delete All Data)"):
+    try:
+        os.remove(log_path)
+        st.success("🗑️ Archive deleted! Start fresh by uploading new vocals.")
+    except FileNotFoundError:
+        st.warning("⚠️ Archive file was already missing.")
+    except Exception as e:
+        st.error(f"Unexpected error: {e}")
+
 try:
     df = pd.read_csv(log_path)
     st.success("📥 CSV loaded successfully!")
