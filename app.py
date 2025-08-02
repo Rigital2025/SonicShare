@@ -91,6 +91,24 @@ if st.button("🧹 Reset Archive (Delete All Data)"):
         st.warning("⚠️ Archive file was already missing.")
     except Exception as e:
         st.error(f"Unexpected error: {e}")
+# 🧼 Auto-Clean CSV Tool
+if st.button("🧽 Auto-Clean CSV"):
+    try:
+        df = pd.read_csv(log_path, on_bad_lines='skip')
+        expected_columns = ["filename", "tags", "prompt", "custom_notes", "license", "source_url"]
+
+        # Only keep expected columns that exist in the current CSV
+        existing_columns = [col for col in expected_columns if col in df.columns]
+        cleaned_df = df[existing_columns]
+
+        # Overwrite the file
+        cleaned_df.to_csv(log_path, index=False)
+        st.success("🧼 CSV cleaned and updated successfully!")
+
+    except FileNotFoundError:
+        st.error("⚠️ Cannot clean — 'logs/data.csv' not found.")
+    except Exception as e:
+        st.error(f"🚨 Cleaning failed: {e}")
 
 try:
     df = pd.read_csv(log_path)
