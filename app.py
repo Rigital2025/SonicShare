@@ -66,12 +66,12 @@ chart = (
 st.altair_chart(chart, use_container_width=True)
 
 
-        # Top Match Display
-        top_label = result["labels"][0]
-        top_score = result["scores"][0] * 100
-        st.markdown(f"**Top Match:** `{top_label}` with **{top_score:.2f}%** confidence")
-    else:
-        st.warning("Please enter a description before classifying.")
+# Top Match Display
+top_label = result["labels"][0]
+top_score = result["scores"][0] * 100
+st.markdown(f"**Top Match:** `{top_label}` with **{top_score:.2f}%** confidence")
+else:
+    st.warning("Please enter a description before classifying.")
 
 # --- UPLOAD SECTION ---
 st.header("🎵 Upload a Vocal Sample")
