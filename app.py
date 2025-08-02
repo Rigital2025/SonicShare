@@ -9,6 +9,28 @@ def load_classifier():
     return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 classifier = load_classifier()
+# --- Genre Prediction Section ---
+st.markdown("## 🎶 Genre Classifier")
+
+# User input
+description = st.text_input("Describe the sound, mood, or instrumentation of your track:")
+
+# Candidate genres
+candidate_labels = ["Neo-Soul", "Gospel", "R&B", "Jazz", "Ambient", "Hip-Hop", "Experimental"]
+
+# Classify button
+if st.button("Classify Genre"):
+    if description:
+        with st.spinner("Analyzing vibe..."):
+            result = classifier(description, candidate_labels)
+            top_labels = result["labels"][:3]
+            top_scores = result["scores"][:3]
+            
+            st.success("Top Predicted Genres:")
+            for label, score in zip(top_labels, top_scores):
+                st.markdown(f"- **{label}** ({score:.2%} confidence)")
+    else:
+        st.warning("Please enter a description before classifying.")
 
 # --- Page Setup ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
