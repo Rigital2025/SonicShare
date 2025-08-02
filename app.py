@@ -4,17 +4,13 @@ import pandas as pd
 from datetime import datetime
 import os
 
-# Page setup
+# --- Page Setup ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
-
-# Logo
 image = Image.open("sonicshare_logo.png")
 st.image(image, use_column_width=True)
 
-# Title & Intro
 st.title("🎙️ SonicShare")
 st.subheader("Your Portal for Vocal Magic + AI Music Creation")
-
 st.markdown("""
 Welcome to **SonicShare**, where vocalists and AI creators collaborate to shape the sound of tomorrow.  
 Upload your voice. Tag your vibe. Empower your creativity.
@@ -22,11 +18,15 @@ Upload your voice. Tag your vibe. Empower your creativity.
 🚧 This is an early-stage prototype. Stay tuned for updates!
 """)
 
-# Upload Section
+# --- Constants ---
+log_path = "logs/data.csv"
+expected_columns = ["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]
+
+# --- Upload Section ---
 st.header("🎵 Upload a Vocal Sample")
 uploaded_file = st.file_uploader("Upload your vocal run, riff, or harmony sample:", type=["wav", "mp3", "aiff"])
 
-if uploaded_file is not None:
+if uploaded_file:
     st.audio(uploaded_file, format='audio/wav')
     st.success("✅ Vocal uploaded successfully!")
 
@@ -75,50 +75,42 @@ if uploaded_file is not None:
         }
 
         df = pd.DataFrame([file_info])
-log_path = "logs/data.csv"
-# log_path already defined above, so nothing needed here if it's a duplicate
-write_header = not os.path.exists(log_path)
+        write_header = not os.path.exists(log_path)
+        df.to_csv(log_path, mode='a', header=write_header, index=False)
+        st.success("✅ Info saved to archive!")
 
-df.to_csv(log_path, mode='a', header=write_header, index=False)
-
-st.success("✅ Info saved to archive!")
-
-# Archive Viewer
+# --- Archive Viewer ---
 st.header("📚 Upload Archive")
-data_path = log_path
 
-# 🧠 Baby Step: Robust CSV loader
 try:
-    df = pd.read_csv(data_path)
+    df = pd.read_csv(log_path)
     st.success("📥 CSV loaded successfully!")
-
-except pd.errors.ParserError as e:
+except pd.errors.ParserError:
     st.error("⚠️ Uh-oh! Something’s wrong with the CSV format. Some rows couldn't be read.")
-    
-    # Optional fallback: try loading with 'on_bad_lines=skip' if you're okay with skipping them
     try:
-        df = pd.read_csv(data_path, on_bad_lines='skip')
+        df = pd.read_csv(log_path, on_bad_lines='skip')
         st.warning("⚠️ Loaded with skipped bad lines. Please review the data.")
-    except Exception as fallback_error:
+    except Exception:
         st.error("❌ Couldn't load the CSV at all. Please check the file manually.")
         st.stop()
-
 except FileNotFoundError:
     st.error(f"🚫 CSV file not found. Make sure it's saved at '{log_path}'.")
     st.stop()
-
-except Exception as general_error:
-    st.error(f"🔥 Unexpected error: {general_error}")
+except Exception as e:
+    st.error(f"🔥 Unexpected error: {e}")
     st.stop()
 
-# Display the archive (only if data is loaded successfully)
-expected_columns = ["filename", "tags", "prompt", "custom_notes", "license", "timestamp"]
+# --- Display the Archive ---
+if not df.empty:
+    if all(col in df.columns for col in expected_columns):
+        st.dataframe(df[expected_columns])
+    else:
+        st.warning("⚠️ Archive loaded, but missing expected columns. You may need to clean or recreate the file.")
+        st.dataframe(df)
 
-if all(col in df.columns for col in expected_columns):
-    st.dataframe(df[expected_columns])
-
+    # Download Button
     st.subheader("⬇️ Download Archive")
-    with open(data_path, "rb") as f:
+    with open(log_path, "rb") as f:
         st.download_button(
             label="📥 Download Archive as CSV",
             data=f,
@@ -126,7 +118,5 @@ if all(col in df.columns for col in expected_columns):
             mime="text/csv"
         )
 else:
-    st.warning("⚠️ Archive loaded, but missing expected columns. You may need to clean or recreate the file.")
-    st.dataframe(df)
-
+    st.info("📭 No uploads found yet. Upload something soulful to get started!")
 
