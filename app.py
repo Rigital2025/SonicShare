@@ -10,9 +10,39 @@ import altair as alt
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
 image = Image.open("sonicshare_logo.png")
 st.image(image, use_column_width=True)
+# --- Custom Styling for Header ---
+st.markdown("""
+    <style>
+        .main-title {
+            font-size: 3em;
+            text-align: center;
+            font-weight: bold;
+            color: #4B0082; /* Indigo Vibes */
+            margin-bottom: 0.2em;
+        }
+        .subtitle {
+            font-size: 1.5em;
+            text-align: center;
+            color: #5E5E5E;
+            margin-bottom: 2em;
+        }
+        .hero-box {
+            background: linear-gradient(90deg, #4B0082 0%, #8A2BE2 100%);
+            padding: 1.5em;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 1.5em;
+        }
+    </style>
 
-st.title("🎙️ SonicShare")
-st.subheader("Your Portal for Vocal Magic + AI Music Creation")
+    <div class='hero-box'>
+        <div class='main-title'>🎙️ SonicShare</div>
+        <div class='subtitle'>Your Portal for Vocal Magic + AI Music Creation</div>
+    </div>
+""", unsafe_allow_html=True)
+# st.title("🎙️ SonicShare")
+# st.subheader("Your Portal for Vocal Magic + AI Music Creation")
+
 st.markdown("""
 Welcome to **SonicShare**, where vocalists and AI creators collaborate to shape the sound of tomorrow.  
 Upload your voice. Tag your vibe. Empower your creativity.
