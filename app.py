@@ -143,6 +143,7 @@ st.header("🔍 Search Your Sonic Archive")
 search_term = st.text_input("Search by tag, filename, or notes:")
 
 try:
+    assert 'df' in locals(), "DataFrame not loaded yet"
     if not df.empty:
         filtered_df = df[
             df.apply(lambda row: search_term.lower() in str(row.values).lower(), axis=1)
