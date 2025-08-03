@@ -142,21 +142,24 @@ st.header("🔍 Search Your Sonic Archive")
 
 search_term = st.text_input("Search by tag, filename, or notes:")
 
-if not df.empty:
-    filtered_df = df[
-        df.apply(lambda row: search_term.lower() in str(row.values).lower(), axis=1)
-    ] if search_term else df
+try:
+    if not df.empty:
+        filtered_df = df[
+            df.apply(lambda row: search_term.lower() in str(row.values).lower(), axis=1)
+        ] if search_term else df
 
-    if filtered_df.empty:
-        st.warning("No results match your search. Try a different tag or word.")
+        if filtered_df.empty:
+            st.warning("No results match your search. Try a different tag or word.")
+        else:
+            st.dataframe(filtered_df)
+
+            # Optional: Preview the first 3 entries
+            st.subheader("🎧 Quick Preview (First 3 Entries)")
+            st.write(filtered_df.head(3))
     else:
-        st.dataframe(filtered_df)
-
-        # Optional: Preview the first 3 entries
-        st.subheader("🎧 Quick Preview (First 3 Entries)")
-        st.write(filtered_df.head(3))
-else:
-    st.info("📭 No uploaded vocal samples found yet.")
+        st.info("📭 No uploaded vocal samples found yet.")
+except NameError:
+    st.info("📭 No archive data available yet. Please upload a vocal sample.")
 
 if st.button("🧹 Reset Archive (Delete All Data)"):
     try:
