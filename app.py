@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 import os
 from transformers import pipeline
+import altair as alt
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
