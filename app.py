@@ -256,5 +256,3 @@ else:
             file_name="sonicshare_archive.csv",
             mime="text/csv"
         )
-else:
-    st.info("📭 No uploads found yet. Upload something soulful to get started!")
