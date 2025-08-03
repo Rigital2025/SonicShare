@@ -225,6 +225,27 @@ if not df.empty:
     else:
         st.warning("⚠️ Archive loaded, but missing expected columns.")
         st.dataframe(df)
+# --- Tag Frequency Visualizer ---
+st.subheader("📊 Vibe Tag Frequency")
+
+if 'df' in locals() and not df.empty:
+    tag_series = df["tags"].dropna().str.split(", ").explode()
+    tag_counts = tag_series.value_counts().reset_index()
+    tag_counts.columns = ["Tag", "Count"]
+
+    chart = alt.Chart(tag_counts).mark_bar(color="#6A5ACD").encode(
+        x=alt.X("Count:Q", title="Frequency"),
+        y=alt.Y("Tag:N", sort='-x'),
+        tooltip=["Tag", "Count"]
+    ).properties(
+        width=600,
+        height=400,
+        title="🎶 Top Vibe Tags in Your Archive"
+    )
+
+    st.altair_chart(chart, use_container_width=True)
+else:
+    st.info("📭 No data to visualize yet. Upload a sample to activate tag analysis.")
 
     # Download Option
     st.subheader("⬇️ Download Archive")
