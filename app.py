@@ -299,3 +299,10 @@ if 'df' in locals() and not df.empty:
         )
 else:
     st.info("📭 No uploads found yet. Upload something soulful to get started!")
+st.markdown("""
+    <hr style="margin-top: 3em; margin-bottom: 1em; border: none; border-top: 1px solid #aaa;" />
+    <div style="text-align: center; font-size: 0.9em; color: gray;">
+        🔮 Crafted with Soul | Powered by Frequency <br>
+        <span style="font-size: 0.75em;">© 2025 SonicShare – A Harmonic Healing Initiative</span>
+    </div>
+""", unsafe_allow_html=True)
