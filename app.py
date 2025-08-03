@@ -256,7 +256,14 @@ else:
             file_name="sonicshare_archive.csv",
             mime="text/csv"
         )
+
 if 'df' in locals() and not df.empty:
-    # ... your download button code ...
+    with open(log_path, "rb") as f:
+        st.download_button(
+            label="⬇️ Download Archive as CSV",
+            data=f,
+            file_name="sonicshare_archive.csv",
+            mime="text/csv"
+        )
 else:
     st.info("📭 No uploads found yet. Upload something soulful to get started!")
