@@ -229,8 +229,7 @@ if not df.empty:
 st.subheader("📊 Vibe Tag Frequency")
 
 if 'df' in locals() and not df.empty:
-    st.write("🧪 Columns in df:", df.columns)
-    tag_series = df["tags"].dropna().astype(str).str.split(", ").explode()
+    tag_series = df["tags"].dropna().str.split(", ").explode()
     tag_counts = tag_series.value_counts().reset_index()
     tag_counts.columns = ["Tag", "Count"]
 
@@ -244,9 +243,10 @@ if 'df' in locals() and not df.empty:
         title="🎶 Top Vibe Tags in Your Archive"
     )
 
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(chart)
+
 else:
-    st.info("📭 No data to visualize yet. Upload a sample to activate tag analysis.")
+    st.info("📭 No uploads yet. Add your sonic gems to see the vibe tag breakdown!")
 
     # Download Option
     st.subheader("⬇️ Download Archive")
