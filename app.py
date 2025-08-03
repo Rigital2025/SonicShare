@@ -229,6 +229,7 @@ if not df.empty:
 st.subheader("📊 Vibe Tag Frequency")
 
 if 'df' in locals() and not df.empty:
+    st.write("🧪 Columns in df:", df.columns)
     tag_series = df["tags"].dropna().str.split(", ").explode()
     tag_counts = tag_series.value_counts().reset_index()
     tag_counts.columns = ["Tag", "Count"]
