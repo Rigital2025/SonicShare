@@ -5,6 +5,15 @@ from datetime import datetime
 import os
 from transformers import pipeline
 import altair as alt
+from huggingface_hub import login
+from dotenv import load_dotenv
+
+# Load the token from your .env file
+load_dotenv()
+hf_token = os.getenv("HF_TOKEN")
+
+# Login to Hugging Face
+login(token=hf_token)
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
