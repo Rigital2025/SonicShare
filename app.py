@@ -1,23 +1,18 @@
 from huggingface_hub import InferenceClient
-from dotenv import load_dotenv
-import os
 import streamlit as st
-from PIL import Image
-import pandas as pd
-from datetime import datetime
-import altair as alt
 
-from huggingface_hub import InferenceClient
-client = InferenceClient(model="gpt2")
+# Initialize client by directly passing the model ID
+client = InferenceClient("gpt2")
 
-# Call a lightweight, supported model (gpt2)
+# Generate a response
+prompt = "Say something kind to DJ Chad."
 response = client.text_generation(
-    prompt="Say something kind to DJ Chad.",
-    model="gpt2",
+    prompt=prompt,
     max_new_tokens=30
 )
 
-# Output the response in your Streamlit app
+# Display it in Streamlit
+st.write("### Response from Hugging Face:")
 st.write(response)
 
 # --- PAGE SETUP ---
