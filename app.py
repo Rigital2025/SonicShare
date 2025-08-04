@@ -1,19 +1,27 @@
+from huggingface_hub import InferenceClient
+from dotenv import load_dotenv
+import os
 import streamlit as st
 from PIL import Image
 import pandas as pd
 from datetime import datetime
-import os
-from transformers import pipeline
 import altair as alt
-from huggingface_hub import InferenceClient
-from dotenv import load_dotenv
-import os
 
+# Load Hugging Face token
 load_dotenv()
 hf_token = os.getenv("HF_TOKEN")
 
+# Setup the Inference Client with your token
 client = InferenceClient(token=hf_token)
-response = client.text_generation("Say something kind to DJ Chad.", model="tiiuae/falcon-7b-instruct")
+
+# Call a lightweight, supported model (gpt2)
+response = client.text_generation(
+    prompt="Say something kind to DJ Chad.",
+    model="gpt2",
+    max_new_tokens=30
+)
+
+# Output the response in your Streamlit app
 st.write(response)
 
 # --- PAGE SETUP ---
