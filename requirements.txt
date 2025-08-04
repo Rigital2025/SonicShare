@@ -3,3 +3,6 @@ pandas
 Pillow
 transformers
 torch
+huggingface_hub
+altair
+python-dotenv
