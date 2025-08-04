@@ -7,12 +7,8 @@ import pandas as pd
 from datetime import datetime
 import altair as alt
 
-# Load Hugging Face token
-load_dotenv()
-hf_token = os.getenv("HF_TOKEN")
-
-# Setup the Inference Client with your token
-client = InferenceClient(token=hf_token)
+from huggingface_hub import InferenceClient
+client = InferenceClient(model="gpt2")
 
 # Call a lightweight, supported model (gpt2)
 response = client.text_generation(
