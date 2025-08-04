@@ -5,15 +5,16 @@ from datetime import datetime
 import os
 from transformers import pipeline
 import altair as alt
-from huggingface_hub import login
+from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
+import os
 
-# Load the token from your .env file
 load_dotenv()
 hf_token = os.getenv("HF_TOKEN")
 
-# Login to Hugging Face
-login(token=hf_token)
+client = InferenceClient(token=hf_token)
+response = client.text_generation("Say something kind to DJ Chad.", model="tiiuae/falcon-7b-instruct")
+st.write(response)
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
