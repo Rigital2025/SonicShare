@@ -3,6 +3,7 @@ import os
 from PIL import Image
 from huggingface_hub import InferenceClient
 client = InferenceClient(model="gpt2")
+genre_client = InferenceClient(model="facebook/bart-large-mnli")
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
@@ -79,11 +80,17 @@ default_genres = [
 selected_genres = st.multiselect("Select genres to compare:", default_genres, default=default_genres[:5])
 
 # --- USER INPUT ---
-user_input = st.text_input("Describe the sound, mood, or instrumentation of your track:")
+user_input = st.text_input(
+    "Describe the sound, mood, or instrumentation of your track:",
+    placeholder="Example: A slow, soulful track with jazzy undertones and lo-fi drums"
+)
 
 if st.button("Classify Genre"):
     if user_input:
-        result = classifier(user_input, candidate_labels=selected_genres)
+        response = genre_client.zero_shot_classification(
+    inputs=user_input,
+    candidate_labels=selected_genres,
+)
 
         st.success("🎯 Top Predicted Genres:")
 
