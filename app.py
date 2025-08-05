@@ -1,24 +1,35 @@
 import streamlit as st
+import os
+from PIL import Image
 from transformers import pipeline
-
-# Title
-st.title("DJ Chad's AI Kindness Generator")
-
-# Prompt input
-prompt = st.text_input("Enter a prompt:", "Say something kind to DJ Chad.")
-
-# Generate text on button click
-if st.button("Generate"):
-    with st.spinner("Thinking..."):
-        generator = pipeline("text-generation", model="gpt2")
-        result = generator(prompt, max_length=30, do_sample=True, temperature=0.7)
-        st.write("### Response:")
-        st.write(result[0]['generated_text'])
+from huggingface_hub import InferenceClient
+client = InferenceClient(model="gpt2")
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
-image = Image.open("sonicshare_logo.png")
-st.image(image, use_column_width=True)
+
+# --- Safe Logo Load ---
+if os.path.exists("sonicshare_logo.png"):
+    image = Image.open("sonicshare_logo.png")
+    st.image(image, width=200)
+else:
+    st.warning("Logo image not found.")
+
+# --- TITLE ---
+st.title("DJ Chad's AI Kindness Generator")
+
+# --- Prompt Input ---
+prompt = st.text_input("Enter a prompt:", "Say something kind to DJ Chad.")
+
+# --- Generate Button ---
+if st.button("Generate"):
+    with st.spinner("Thinking..."):
+        try:
+            response = client.text_generation(prompt=prompt, max_new_tokens=30)
+            st.write("### Response from Hugging Face:")
+            st.write(response)
+        except Exception as e:
+            st.error(f"🤖 Oops! Something went wrong: {e}")
 # --- Custom Styling for Header ---
 st.markdown("""
     <style>
