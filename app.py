@@ -1,11 +1,8 @@
 import streamlit as st
 from transformers import pipeline
-
-# Create text generation pipeline
 generator = pipeline("text-generation", model="gpt2")
-
-# Define prompt
-prompt = "Say something kind to DJ Chad."
+result = generator("Say something kind to DJ Chad.", max_length=30)
+print(result)
 
 # Generate text
 response = generator(prompt, max_new_tokens=30, do_sample=True, temperature=0.7)
