@@ -1,19 +1,18 @@
 from huggingface_hub import InferenceClient
 import streamlit as st
 
-client = InferenceClient("gpt2")  # Keep as-is
+# Initialize client
+client = InferenceClient("gpt2")
+
+# Define prompt first
+prompt = "Say something kind to DJ Chad."
+
+# Now generate a response
 response = client.text_generation(
     prompt=prompt,
     max_new_tokens=30,
-    do_sample=True,  # Optional: enables sampling vs. deterministic output
-    temperature=0.7  # Optional: controls randomness
-)
-
-# Generate a response
-prompt = "Say something kind to DJ Chad."
-response = client.text_generation(
-    prompt=prompt,
-    max_new_tokens=30
+    do_sample=True,
+    temperature=0.7
 )
 
 # Display it in Streamlit
