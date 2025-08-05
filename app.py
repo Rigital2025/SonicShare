@@ -1,19 +1,18 @@
-from huggingface_hub import InferenceClient
 import streamlit as st
+from transformers import pipeline
 
-# Initialize client
-client = InferenceClient("gpt2")
+# Create text generation pipeline
+generator = pipeline("text-generation", model="gpt2")
 
-# Define prompt first
+# Define prompt
 prompt = "Say something kind to DJ Chad."
 
-# Now generate a response
-response = client.text_generation(
-    prompt=prompt,
-    max_new_tokens=30,
-    do_sample=True,
-    temperature=0.7
-)
+# Generate text
+response = generator(prompt, max_new_tokens=30, do_sample=True, temperature=0.7)
+
+# Display response
+st.write("### Response from Hugging Face Transformers:")
+st.write(response[0]["generated_text"])
 
 # Display it in Streamlit
 st.write("### Response from Hugging Face:")
