@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 from PIL import Image
-from transformers import pipeline
 from huggingface_hub import InferenceClient
 client = InferenceClient(model="gpt2")
 
@@ -30,6 +29,7 @@ if st.button("Generate"):
             st.write(response)
         except Exception as e:
             st.error(f"🤖 Oops! Something went wrong: {e}")
+            
 # --- Custom Styling for Header ---
 st.markdown("""
     <style>
@@ -69,13 +69,6 @@ Upload your voice. Tag your vibe. Empower your creativity.
 
 🚧 This is an early-stage prototype. Stay tuned for updates!
 """)
-
-# --- CLASSIFIER LOADER ---
-@st.cache_resource
-def load_classifier():
-    return pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
-
-classifier = load_classifier()
 
 # --- GENRE OPTIONS ---
 st.markdown("### 🎧 Choose genres to classify against (or use default):")
