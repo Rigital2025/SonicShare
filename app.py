@@ -1,19 +1,19 @@
 import streamlit as st
 from transformers import pipeline
-generator = pipeline("text-generation", model="gpt2")
-result = generator("Say something kind to DJ Chad.", max_length=30)
-print(result)
 
-# Generate text
-response = generator(prompt, max_new_tokens=30, do_sample=True, temperature=0.7)
+# Title
+st.title("DJ Chad's AI Kindness Generator")
 
-# Display response
-st.write("### Response from Hugging Face Transformers:")
-st.write(response[0]["generated_text"])
+# Prompt input
+prompt = st.text_input("Enter a prompt:", "Say something kind to DJ Chad.")
 
-# Display it in Streamlit
-st.write("### Response from Hugging Face:")
-st.write(response)
+# Generate text on button click
+if st.button("Generate"):
+    with st.spinner("Thinking..."):
+        generator = pipeline("text-generation", model="gpt2")
+        result = generator(prompt, max_length=30, do_sample=True, temperature=0.7)
+        st.write("### Response:")
+        st.write(result[0]['generated_text'])
 
 # --- PAGE SETUP ---
 st.set_page_config(page_title="SonicShare", page_icon="🎙️")
